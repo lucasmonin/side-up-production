@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Side Up Production</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#000;color:#fff;font-family:'DM Sans',sans-serif;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:1.4rem 2.5rem;display:flex;justify-content:space-between;align-items:center;transition:all .4s}
+nav.scrolled{background:rgba(0,0,0,.93);padding:1rem 2.5rem;border-bottom:.5px solid rgba(255,255,255,.08);backdrop-filter:blur(14px)}
+.nav-logo img{height:28px;filter:brightness(10);display:block;cursor:pointer}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{font-family:'Syne',sans-serif;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.45);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:#fff}
+.nav-cta{font-family:'Syne',sans-serif;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;border:.5px solid rgba(255,255,255,.3);padding:.45rem 1.1rem;color:#fff;text-decoration:none;transition:background .2s,color .2s}
+.nav-cta:hover{background:#fff;color:#000}
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.72}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.45) 0%,rgba(0,0,0,.2) 50%,#000 100%)}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 1.5rem;max-width:900px}
+.hero-eyebrow{font-family:'Syne',sans-serif;font-size:.68rem;letter-spacing:.35em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1.4rem;animation:fadeUp .9s ease both}
+.hero-logo{height:50px;filter:brightness(10);margin:0 auto 2.2rem;display:block;animation:fadeUp .9s .1s ease both}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(3rem,8vw,6rem);font-weight:800;line-height:.95;letter-spacing:-.02em;margin-bottom:1.4rem;animation:fadeUp .9s .2s ease both}
+.hero-title span{display:block;color:rgba(255,255,255,.2);font-weight:400}
+.hero-desc{font-size:.9rem;color:rgba(255,255,255,.45);line-height:1.9;max-width:500px;margin:0 auto 2.2rem;animation:fadeUp .9s .3s ease both}
+.hero-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;animation:fadeUp .9s .4s ease both}
+.btn-w{background:#fff;color:#000;font-family:'Syne',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:.8rem 1.8rem;border:none;cursor:pointer;text-decoration:none;display:inline-block;transition:opacity .2s,transform .2s}
+.btn-w:hover{opacity:.85;transform:translateY(-2px)}
+.btn-o{background:transparent;color:#fff;font-family:'Syne',sans-serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;padding:.8rem 1.8rem;border:.5px solid rgba(255,255,255,.3);cursor:pointer;text-decoration:none;display:inline-block;transition:background .2s}
+.btn-o:hover{background:rgba(255,255,255,.08)}
+.scroll-hint{position:absolute;bottom:2rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:.3;z-index:2}
+.scroll-hint span{font-size:.55rem;letter-spacing:.2em;text-transform:uppercase}
+.scroll-line{width:.5px;height:44px;background:rgba(255,255,255,.5);animation:pulse 1.8s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scaleY(1);opacity:.4}50%{transform:scaleY(.4);opacity:.1}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+.section{padding:6rem 2.5rem;max-width:1140px;margin:0 auto}
+.section-label{font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.2em;text-transform:uppercase;color:#555;margin-bottom:.8rem}
+.section-title{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,4vw,2.8rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:2rem}
+.filter-row{display:flex;gap:.4rem;margin-bottom:2rem;flex-wrap:wrap}
+.filter-btn{font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;padding:.4rem 1rem;border:.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s}
+.filter-btn.active,.filter-btn:hover{background:#fff;color:#000;border-color:#fff}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(255,255,255,.05)}
+.proj-card{position:relative;overflow:hidden;cursor:pointer;background:#000;aspect-ratio:3/4}
+.proj-card img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease,filter .5s;filter:grayscale(20%) brightness(.7)}
+.proj-card:hover img{transform:scale(1.07);filter:grayscale(0%) brightness(.55)}
+.proj-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.88) 0%,transparent 55%);display:flex;flex-direction:column;justify-content:flex-end;padding:1.2rem;opacity:0;transition:opacity .3s}
+.proj-card:hover .proj-ov{opacity:1}
+.proj-cat{font-family:'Syne',sans-serif;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:.25rem}
+.proj-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700}
+.proj-year{font-size:.68rem;color:rgba(255,255,255,.35);margin-top:.2rem}
+.proj-num{position:absolute;top:.8rem;right:.8rem;font-family:'Syne',sans-serif;font-size:.58rem;letter-spacing:.12em;color:rgba(255,255,255,.25)}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+.about-img-wrap{position:relative}
+.about-img{width:100%;aspect-ratio:3/4;object-fit:cover;filter:grayscale(20%);display:block}
+.about-badge{position:absolute;bottom:-1.2rem;left:-1.2rem;background:rgba(0,0,0,.92);border:.5px solid rgba(255,255,255,.1);padding:1rem 1.4rem;backdrop-filter:blur(10px)}
+.about-badge-n{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;line-height:1}
+.about-badge-l{font-size:.65rem;color:#555;margin-top:.25rem}
+.about-body{display:flex;flex-direction:column;gap:1rem}
+.about-body h2{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;line-height:1.1}
+.about-body h2 em{font-style:italic;color:rgba(255,255,255,.25);font-weight:400}
+.about-body p{font-size:.85rem;color:rgba(255,255,255,.45);line-height:1.9}
+.about-loc{font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.14em;text-transform:uppercase;color:#555}
+.services-bg{background:#080808;border-top:.5px solid rgba(255,255,255,.06);border-bottom:.5px solid rgba(255,255,255,.06)}
+.services-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.svc-card{padding:2.2rem;border-right:.5px solid rgba(255,255,255,.07);transition:background .3s}
+.svc-card:last-child{border-right:none}
+.svc-card:hover{background:rgba(255,255,255,.025)}
+.svc-icon{font-size:1.5rem;margin-bottom:1rem}
+.svc-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;margin-bottom:.6rem}
+.svc-card p{font-size:.78rem;color:rgba(255,255,255,.38);line-height:1.8}
+.contact-inner{max-width:760px;margin:0 auto;text-align:center;padding:7rem 2rem}
+.contact-title{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,7vw,5rem);font-weight:800;line-height:.95;letter-spacing:-.02em;margin-bottom:1.4rem}
+.contact-title em{display:block;font-style:italic;font-weight:400;color:rgba(255,255,255,.2)}
+.contact-desc{font-size:.85rem;color:rgba(255,255,255,.38);line-height:1.9;margin-bottom:2.5rem}
+.contact-btns{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap}
+.footer{border-top:.5px solid rgba(255,255,255,.07);padding:1.5rem 2.5rem;display:flex;justify-content:space-between;align-items:center}
+.footer img{height:20px;filter:brightness(10) opacity(.4)}
+.footer span{font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#444}
+.fade-in{opacity:0;transform:translateY(30px);transition:opacity .7s ease,transform .7s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.dfield{display:flex;flex-direction:column;gap:.35rem}
+.dfield label{font-size:.7rem;color:#666;letter-spacing:.05em}
+.dfield input,.dfield textarea,.dfield select{background:#1a1a1a;border:.5px solid rgba(255,255,255,.1);color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.65rem .9rem;border-radius:3px;outline:none;transition:border .2s;width:100%}
+.dfield input::placeholder,.dfield textarea::placeholder{color:#444}
+.dfield input:focus,.dfield textarea:focus,.dfield select:focus{border-color:rgba(255,255,255,.35)}
+.dfield textarea{resize:vertical;min-height:100px}
+.dfield select option{background:#1a1a1a}
+.submit-btn{width:100%;background:#fff;color:#000;font-family:'Syne',sans-serif;font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;padding:.9rem 2rem;border:none;cursor:pointer;transition:opacity .2s,transform .2s;border-radius:2px}
+.submit-btn:hover{opacity:.85;transform:translateY(-1px)}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+#admin-overlay{display:none;position:fixed;top:0;right:0;bottom:0;width:480px;z-index:1000;background:rgba(10,10,10,.97);border-left:.5px solid rgba(255,255,255,.1);overflow-y:auto;padding:2rem 1.5rem}
+#admin-panel h2{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:.3rem}
+.subtitle{font-size:.75rem;color:#555;margin-bottom:2rem}
+.admin-section{margin-bottom:2rem;padding-bottom:2rem;border-bottom:.5px solid rgba(255,255,255,.08)}
+.admin-section:last-child{border-bottom:none}
+.admin-section h3{font-family:'Syne',sans-serif;font-size:.75rem;letter-spacing:.15em;text-transform:uppercase;color:#888;margin-bottom:1rem}
+.field{margin-bottom:1rem}
+.field label{display:block;font-size:.72rem;color:#666;margin-bottom:.35rem}
+.field input[type=text],.field input[type=email],.field textarea,.field select{width:100%;background:#1a1a1a;border:.5px solid rgba(255,255,255,.12);color:#fff;font-family:'DM Sans',sans-serif;font-size:.85rem;padding:.6rem .8rem;border-radius:4px;outline:none;transition:border .2s}
+.field input[type=text]:focus,.field textarea:focus{border-color:rgba(255,255,255,.35)}
+.field textarea{resize:vertical;min-height:72px}
+.fields-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.upload-box{border:.5px dashed rgba(255,255,255,.2);border-radius:6px;padding:1rem;text-align:center;cursor:pointer;transition:all .2s;background:#161616;position:relative}
+.upload-box:hover{border-color:rgba(255,255,255,.45);background:#1e1e1e}
+.upload-box input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.upload-box .upload-icon{font-size:1.4rem;margin-bottom:.4rem}
+.upload-box .upload-label{font-size:.72rem;color:#666;display:block}
+.upload-box .upload-name{font-size:.72rem;color:#aaa;margin-top:.3rem;word-break:break-all}
+.preview-img{width:100%;height:120px;object-fit:cover;border-radius:4px;margin-top:.5rem;display:none}
+.preview-video{width:100%;height:100px;border-radius:4px;margin-top:.5rem;display:none}
+.proj-admin{background:#1a1a1a;border:.5px solid rgba(255,255,255,.08);border-radius:6px;padding:1rem;margin-bottom:.8rem}
+.proj-admin-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem}
+.proj-admin-head span{font-size:.8rem;font-weight:500}
+.del-btn{background:none;border:none;color:#555;font-size:.7rem;cursor:pointer;transition:color .2s;padding:.2rem .5rem}
+.del-btn:hover{color:#e55}
+.admin-btns{display:flex;gap:.8rem;margin-top:2rem;flex-wrap:wrap}
+.save-btn{background:#fff;color:#000;font-family:'Syne',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:.7rem 1.6rem;border:none;cursor:pointer;flex:1;transition:opacity .2s;border-radius:2px}
+.save-btn:hover{opacity:.85}
+.close-btn{background:transparent;color:#fff;font-family:'Syne',sans-serif;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;padding:.7rem 1.2rem;border:.5px solid rgba(255,255,255,.2);cursor:pointer;border-radius:2px}
+.close-btn:hover{background:rgba(255,255,255,.07)}
+.add-proj-btn{background:transparent;color:rgba(255,255,255,.5);font-family:'Syne',sans-serif;font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;padding:.5rem 1rem;border:.5px solid rgba(255,255,255,.15);cursor:pointer;transition:all .2s;margin-top:.5rem;width:100%;border-radius:2px}
+.add-proj-btn:hover{background:rgba(255,255,255,.07);color:#fff}
+.reset-btn{width:100%;background:transparent;border:.5px solid rgba(229,85,85,.3);color:rgba(229,85,85,.6);font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem 1rem;cursor:pointer;transition:all .2s;border-radius:2px;margin-top:.5rem;display:block}
+.reset-btn:hover{background:rgba(229,85,85,.1);border-color:rgba(229,85,85,.6);color:#e55}
+.saved-toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(10px);background:#fff;color:#000;padding:.7rem 1.6rem;font-family:'Syne',sans-serif;font-size:.72rem;letter-spacing:.1em;z-index:2000;opacity:0;transition:all .3s;pointer-events:none;border-radius:2px}
+.saved-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+
+.mtype-btn{font-family:'Syne',sans-serif;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;padding:.4rem .9rem;border:.5px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s;border-radius:2px;flex:1}
+.mtype-btn:hover{background:rgba(255,255,255,.07);color:#fff}
+.mtype-active{background:rgba(255,255,255,.12)!important;color:#fff!important;border-color:rgba(255,255,255,.4)!important}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:.5px solid rgba(255,255,255,.07);border-bottom:.5px solid rgba(255,255,255,.07);padding:1.8rem 0;background:#000}
+.ticker-label{font-family:'Syne',sans-serif;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:#333;text-align:center;margin-bottom:1.4rem}
+.ticker-track{display:flex;gap:4rem;width:max-content;animation:ticker 25s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-wrap:hover .ticker-track{animation-play-state:paused}
+.ticker-logo{height:32px;width:auto;object-fit:contain;filter:brightness(10) invert(0) opacity(.35);transition:opacity .3s,filter .3s}
+.ticker-logo:hover{opacity:1!important;filter:brightness(10) opacity(.9)}
+.ticker-text{font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:rgba(255,255,255,.2);white-space:nowrap;letter-spacing:.08em;transition:color .3s}
+.ticker-text:hover{color:rgba(255,255,255,.7)}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ─── HAMBURGER ─── */
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:.4rem;z-index:200}
+.hamburger span{display:block;width:22px;height:1.5px;background:#fff;transition:all .3s}
+.hamburger.open span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
+.hamburger.open span:nth-child(3){transform:translateY(-6.5px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:150;flex-direction:column;align-items:center;justify-content:center;gap:2.5rem}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:700;color:rgba(255,255,255,.6);text-decoration:none;letter-spacing:.05em;transition:color .2s}
+.mobile-menu a:hover{color:#fff}
+.mobile-menu .m-cta{border:.5px solid rgba(255,255,255,.3);padding:.7rem 2rem;font-size:1rem;color:#fff}
+
+@media(max-width:768px){
+  /* NAV */
+  .nav-links,.nav-cta{display:none}
+  .hamburger{display:flex}
+  nav{padding:1.2rem 1.5rem}
+
+  /* HERO */
+  .hero-content{padding:0 1.2rem}
+  .hero-logo{height:36px!important;margin-bottom:1.5rem!important}
+  .hero-eyebrow{font-size:.6rem!important;letter-spacing:.25em!important;margin-bottom:1rem!important}
+  .hero-title{font-size:clamp(2.4rem,10vw,3.5rem)!important;margin-bottom:1rem!important}
+  .hero-desc{font-size:.82rem!important;margin-bottom:1.6rem!important;padding:0 .5rem}
+  .hero-btns{flex-direction:column;align-items:center;gap:.6rem!important}
+  .btn-w,.btn-o{width:100%;max-width:280px;text-align:center;padding:.75rem 1.4rem}
+
+  /* TICKER */
+  .ticker-label{font-size:.55rem;padding:0 1rem}
+
+  /* SECTIONS */
+  .section{padding:4rem 1.2rem!important}
+
+  /* PROJECTS */
+  .projects-grid{grid-template-columns:repeat(2,1fr)!important}
+  .proj-ov{opacity:1!important;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,transparent 60%)}
+  .proj-title{font-size:.85rem}
+  .filter-row{gap:.3rem}
+  .filter-btn{font-size:.58rem;padding:.35rem .7rem}
+
+  /* ABOUT */
+  .about-grid{grid-template-columns:1fr!important;gap:2.5rem!important}
+  .about-img-wrap{max-width:280px;margin:0 auto}
+  .about-badge{bottom:-.8rem;left:-.8rem;padding:.7rem 1rem}
+  .about-badge-n{font-size:1.8rem}
+  .about-body h2{font-size:2rem}
+
+  /* SERVICES */
+  .services-grid{grid-template-columns:1fr 1fr!important}
+  .svc-card{padding:1.4rem;border-right:none!important;border-bottom:.5px solid rgba(255,255,255,.07)}
+  .svc-card:last-child{border-bottom:none}
+
+  /* DEVIS */
+  #devis .section > div{grid-template-columns:1fr!important;gap:2.5rem!important}
+  #devis-wrap .section > div > div:first-child{display:none}
+  .dfield input,.dfield textarea,.dfield select{font-size:16px!important}
+  form > div[style*="grid"]{grid-template-columns:1fr!important}
+
+  /* CONTACT */
+  .contact-title{font-size:clamp(2rem,8vw,3rem)!important}
+  .contact-btns{flex-direction:column;align-items:center}
+  .contact-btns .btn-w,.contact-btns .btn-o{width:100%;max-width:280px;text-align:center}
+
+  /* FOOTER */
+  .footer{flex-direction:column;gap:.8rem;text-align:center;padding:1.5rem 1.2rem}
+
+  /* ADMIN */
+  #admin-overlay{width:100%!important;left:0}
+  .fields-row{grid-template-columns:1fr!important}
+}
+
+@media(max-width:480px){
+  .projects-grid{grid-template-columns:1fr!important}
+  .services-grid{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+
+<nav id="navbar">
+  <div class="nav-logo"><img id="site-logo" src="Side_Up_production.png" alt="Side Up Production"></div>
+  <ul class="nav-links">
+    <li><a href="#projets">Portfolio</a></li>
+    <li><a href="#about">A propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#devis">Devis</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Contact</a>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobile-menu">
+  <a href="#projets" onclick="toggleMenu()">Portfolio</a>
+  <a href="#about" onclick="toggleMenu()">À propos</a>
+  <a href="#services" onclick="toggleMenu()">Services</a>
+  <a href="#devis" onclick="toggleMenu()">Devis</a>
+  <a href="#contact" class="m-cta" onclick="toggleMenu()">Contact</a>
+</div>
+
+<section class="hero">
+  <video id="hero-video" autoplay muted loop playsinline>
+    <source id="hero-video-src" src="sco_ffi0.mp4" type="video/mp4">
+  </video>
+  <img id="hero-bg-img" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.72;display:none" alt=""><div class="hero-overlay"></div>
+  <div class="hero-content" id="hero-content">
+    <p class="hero-eyebrow" id="hero-eyebrow">Photographie · Video · Creation</p>
+    <img id="hero-logo" src="Side_Up_production.png" alt="Side Up Production" class="hero-logo">
+    <h1 class="hero-title"><span id="hero-title-main">Capturer</span><span id="hero-title-sub">l instant juste.</span></h1>
+    <p class="hero-desc" id="hero-desc">Images fixes et films qui revelement la lumiere et l emotion vraie.</p>
+    <div class="hero-btns">
+      <a id="hero-btn1" href="#projets" class="btn-w">Voir les projets</a>
+      <a id="hero-btn2" href="#contact" class="btn-o">Me contacter</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- TICKER CLIENTS -->
+<div class="ticker-wrap" id="ticker-section">
+  <p class="ticker-label">Ils nous ont fait confiance</p>
+  <div style="position:relative;overflow:hidden">
+    <div class="ticker-track" id="ticker-track"></div>
+  </div>
+</div>
+
+<div id="projets" class="section" style="padding-top:6rem;padding-bottom:6rem">
+  <p class="section-label fade-in">Portfolio</p>
+  <h2 class="section-title fade-in">Dernieres realisations</h2>
+  <div class="filter-row fade-in">
+    <button class="filter-btn active" onclick="filterCat('Tous',this)">Tous</button>
+    <button class="filter-btn" onclick="filterCat('Video',this)">Video</button>
+    <button class="filter-btn" onclick="filterCat('Photo',this)">Photo</button>
+    <button class="filter-btn" onclick="filterCat('Creation',this)">Creation</button>
+  </div>
+  <div class="projects-grid fade-in" id="projects-grid"></div>
+</div>
+
+<div id="about-wrap" style="background:#050505;padding:0">
+  <div class="section">
+    <div class="about-grid">
+      <div class="about-img-wrap fade-in">
+        <img id="about-img" src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=900&auto=format&fit=crop" alt="" class="about-img"><video id="about-video" style="width:100%;aspect-ratio:3/4;object-fit:cover;display:none" muted autoplay loop playsinline></video>
+        <div class="about-badge"><div class="about-badge-n" id="about-badge-n">10+</div><div class="about-badge-l" id="about-badge-l">Annees experience</div></div>
+      </div>
+      <div class="about-body fade-in">
+        <p class="about-loc" id="about-loc">Angers, France</p>
+        <h2 id="about-title">Side Up<br><em>Production</em></h2>
+        <p id="about-p1">Structure independante specialisee en photographie et production video.</p>
+        <p id="about-p2">De l idee a la livraison, accompagnement avec rigueur et sensibilite.</p>
+        <a href="#contact" class="btn-w" style="margin-top:.5rem;display:inline-block">Discutons de votre projet</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="services-wrap" class="services-bg">
+  <div class="section">
+    <p class="section-label fade-in">Services</p>
+    <h2 class="section-title fade-in">Ce que nous proposons</h2>
+    <div class="services-grid fade-in" id="services-grid"></div>
+  </div>
+</div>
+
+<div id="devis-wrap" style="background:#060606;border-top:.5px solid rgba(255,255,255,.06)">
+  <div class="section">
+    <div style="display:grid;grid-template-columns:1fr 1.4fr;gap:5rem;align-items:start">
+      <div class="fade-in">
+        <p class="section-label">Devis gratuit</p>
+        <h2 class="section-title" style="margin-bottom:1.2rem">Parlons de<br><em style="font-style:italic;color:rgba(255,255,255,.25);font-weight:400">votre projet.</em></h2>
+        <p style="font-size:.85rem;color:rgba(255,255,255,.4);line-height:1.9;margin-bottom:2rem">Remplissez le formulaire et je vous recontacte sous 24h.</p>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div style="display:flex;align-items:center;gap:.8rem"><span>⚡</span><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Reponse sous 24h</span></div>
+          <div style="display:flex;align-items:center;gap:.8rem"><span>🎯</span><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Devis personnalise et gratuit</span></div>
+          <div style="display:flex;align-items:center;gap:.8rem"><span>📍</span><span style="font-size:.82rem;color:rgba(255,255,255,.4)">Angers · France et international</span></div>
+        </div>
+      </div>
+      <div class="fade-in">
+        <form id="devis-form" action="https://formspree.io/f/VOTRE_ID_ICI" method="POST">
+          <input type="hidden" name="_subject" value="Nouvelle demande de devis - Side Up Production">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem">
+            <div class="dfield"><label>Votre nom *</label><input type="text" name="nom" placeholder="Lucas Martin" required></div>
+            <div class="dfield"><label>Email *</label><input type="email" name="email" placeholder="lucas@email.com" required></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem">
+            <div class="dfield"><label>Telephone</label><input type="text" name="telephone" placeholder="06 12 34 56 78"></div>
+            <div class="dfield"><label>Type de projet *</label>
+              <select name="type_projet" required>
+                <option value="" disabled selected>Choisir...</option>
+                <option>Aftermovie / Clip video</option>
+                <option>Reportage photo</option>
+                <option>Contenu reseaux sociaux</option>
+                <option>Photo corporate</option>
+                <option>DJ Set</option>
+                <option>Autre</option>
+              </select>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-bottom:.8rem">
+            <div class="dfield"><label>Date</label><input type="text" name="date" placeholder="Ex: 15 juin 2025"></div>
+            <div class="dfield"><label>Budget</label>
+              <select name="budget">
+                <option value="" disabled selected>Choisir...</option>
+                <option>Moins de 500€</option>
+                <option>500€ - 1 000€</option>
+                <option>1 000€ - 2 500€</option>
+                <option>2 500€ - 5 000€</option>
+                <option>Plus de 5 000€</option>
+              </select>
+            </div>
+          </div>
+          <div class="dfield" style="margin-bottom:1.2rem">
+            <label>Description *</label>
+            <textarea name="description" rows="4" placeholder="Decrivez votre projet..." required></textarea>
+          </div>
+          <button type="submit" class="submit-btn" id="submit-btn">Envoyer ma demande</button>
+          <p style="font-size:.68rem;color:rgba(255,255,255,.2);margin-top:.8rem;text-align:center">Vos donnees ne sont jamais partagees.</p>
+        </form>
+        <div id="form-success" style="display:none;text-align:center;padding:3rem 1rem;border:.5px solid rgba(255,255,255,.08);border-radius:6px">
+          <div style="font-size:2.5rem;margin-bottom:1rem">✅</div>
+          <h3 style="font-family:Syne,sans-serif;font-size:1.3rem;font-weight:700;margin-bottom:.8rem">Demande envoyee !</h3>
+          <p style="font-size:.85rem;color:rgba(255,255,255,.45);line-height:1.8">Je vous recontacte sous 24h.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="contact">
+  <div class="contact-inner fade-in">
+    <p class="section-label" style="margin-bottom:1rem">Contact</p>
+    <h2 class="contact-title"><span id="contact-title">Donnons vie</span><em id="contact-sub">a votre projet.</em></h2>
+    <p class="contact-desc" id="contact-desc">Disponible pour projets video, photo, evenementiel et collaborations creatives.</p>
+    <div class="contact-btns">
+      <a id="contact-insta" href="https://instagram.com" class="btn-w">Instagram</a>
+      <a id="contact-email" href="mailto:contact@sideup.fr" class="btn-o">Envoyer un mail</a>
+    </div>
+  </div>
+</div>
+
+<footer class="footer">
+  <img src="Side_Up_production.png" alt="Side Up Production">
+  <span id="footer-copy">2025 Side Up Production</span>
+  <span id="footer-loc">Angers, France</span>
+</footer>
+
+<div class="saved-toast" id="toast">Sauvegarde !</div>
+
+<div id="admin-overlay">
+<div id="admin-panel">
+  <h2>Admin</h2>
+  <p class="subtitle">Modifiez en temps reel. Cliquez Sauvegarder pour conserver.</p>
+  <div class="admin-section">
+    <h3>📐 Mise en page & Espaces</h3>
+    <p style="font-size:.72rem;color:#555;margin-bottom:1rem">Controllez l'espace au-dessus et en-dessous de chaque module.</p>
+
+    <div class="field"><label>Espace apres le Hero <span id="sp-hero-val" style="color:#888">0px</span></label>
+      <input type="range" id="sp-hero" min="0" max="300" value="0" style="width:100%" oninput="updateSpacing()">
+    </div>
+
+    <div class="field"><label>Padding haut — Portfolio <span id="sp-proj-t-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-proj-t" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+    <div class="field"><label>Padding bas — Portfolio <span id="sp-proj-b-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-proj-b" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+
+    <div class="field"><label>Padding haut — A propos <span id="sp-about-t-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-about-t" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+    <div class="field"><label>Padding bas — A propos <span id="sp-about-b-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-about-b" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+
+    <div class="field"><label>Padding haut — Services <span id="sp-svc-t-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-svc-t" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+    <div class="field"><label>Padding bas — Services <span id="sp-svc-b-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-svc-b" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+
+    <div class="field"><label>Padding haut — Devis <span id="sp-dev-t-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-dev-t" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+    <div class="field"><label>Padding bas — Devis <span id="sp-dev-b-val" style="color:#888">96px</span></label>
+      <input type="range" id="sp-dev-b" min="0" max="300" value="96" style="width:100%" oninput="updateSpacing()">
+    </div>
+
+    <div class="field"><label>Padding haut — Contact <span id="sp-con-t-val" style="color:#888">112px</span></label>
+      <input type="range" id="sp-con-t" min="0" max="300" value="112" style="width:100%" oninput="updateSpacing()">
+    </div>
+    <div class="field"><label>Padding bas — Contact <span id="sp-con-b-val" style="color:#888">112px</span></label>
+      <input type="range" id="sp-con-b" min="0" max="300" value="112" style="width:100%" oninput="updateSpacing()">
+    </div>
+
+    <div class="field" style="margin-top:1rem"><label>Hauteur de la video Hero <span id="sp-hero-h-val" style="color:#888">100vh</span></label>
+      <input type="range" id="sp-hero-h" min="30" max="100" value="100" style="width:100%" oninput="updateSpacing()">
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <h3>🏷 Bandeau clients</h3>
+    <p style="font-size:.72rem;color:#555;margin-bottom:1rem">Ajoutez les logos ou noms de vos clients. Le bandeau défile automatiquement.</p>
+    <div id="ticker-admin-list"></div>
+    <button class="add-proj-btn" onclick="addTicker()" style="margin-top:.5rem">+ Ajouter un client</button>
+    <div class="field" style="margin-top:1rem">
+      <label>Vitesse du défilement</label>
+      <select id="ticker-speed">
+        <option value="15s">Rapide</option>
+        <option value="25s" selected>Normal</option>
+        <option value="40s">Lent</option>
+        <option value="60s">Très lent</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Titre du bandeau</label>
+      <input type="text" id="ticker-label-text" placeholder="Ils nous ont fait confiance">
+    </div>
+  </div>
+
+  <div class="admin-section">
+    <h3>Media du Hero</h3>
+    <div class="field" style="margin-bottom:.75rem">
+      <label>Type de media</label>
+      <div style="display:flex;gap:.5rem">
+        <button onclick="setHeroMediaType('video')" id="hero-mtype-video" class="mtype-btn mtype-active">🎬 Video</button>
+        <button onclick="setHeroMediaType('photo')" id="hero-mtype-photo" class="mtype-btn">📷 Photo</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>🔗 Lien URL (YouTube, Vimeo, lien direct...)</label>
+      <input type="text" id="hero-url-input" placeholder="https://www.youtube.com/watch?v=..." oninput="previewHeroUrl(this.value)">
+      <button class="add-proj-btn" style="margin-top:.4rem" onclick="applyHeroUrl()">Appliquer ce lien</button>
+    </div>
+    <div class="field"><label style="color:#444;font-size:.65rem">— OU uploader un fichier —</label></div>
+    <div class="upload-box"><input type="file" accept="video/*,image/*" id="upload-video" onchange="handleHeroMedia(this)"><div class="upload-icon" id="hero-upload-icon">🎬</div><span class="upload-label" id="hero-upload-label">Choisir une video / photo</span><span class="upload-name" id="video-name"></span><video class="preview-video" id="preview-video" muted></video><img id="preview-hero-img" style="width:100%;height:100px;object-fit:cover;border-radius:4px;margin-top:.5rem;display:none"></div>
+    <button class="reset-btn" onclick="resetHeroMedia()">✕ Supprimer le media</button>
+  </div>
+  <div class="admin-section">
+    <h3>Logo</h3>
+    <div class="upload-box"><input type="file" accept="image/*" id="upload-logo" onchange="handleFile(this,'logoData','site-logo','logo-preview');handleFile(this,'logoData','hero-logo','logo-preview2')"><div class="upload-icon">🖼</div><span class="upload-label">Choisir le logo</span><span class="upload-name" id="logoData-name"></span><img class="preview-img" id="logo-preview"></div>
+    <button class="reset-btn" onclick="resetLogo()">✕ Supprimer le logo</button>
+  </div>
+  <div class="admin-section">
+    <h3>Style du texte Hero</h3>
+    <div class="fields-row">
+      <div class="field"><label>Couleur titre</label><input type="color" id="a-title-color" value="#ffffff" style="width:100%;height:40px;background:#1a1a1a;border:.5px solid rgba(255,255,255,.12);cursor:pointer;border-radius:4px;padding:2px"></div>
+      <div class="field"><label>Couleur sous-titre</label><input type="color" id="a-sub-color" value="#333333" style="width:100%;height:40px;background:#1a1a1a;border:.5px solid rgba(255,255,255,.12);cursor:pointer;border-radius:4px;padding:2px"></div>
+    </div>
+    <div class="fields-row">
+      <div class="field"><label>Couleur description</label><input type="color" id="a-desc-color" value="#aaaaaa" style="width:100%;height:40px;background:#1a1a1a;border:.5px solid rgba(255,255,255,.12);cursor:pointer;border-radius:4px;padding:2px"></div>
+      <div class="field"><label>Taille titre</label><input type="range" id="a-title-size" min="30" max="120" value="72" style="width:100%;margin-top:.5rem" oninput="document.getElementById('title-size-val').textContent=this.value+'px';livePreview()"><span id="title-size-val" style="font-size:.7rem;color:#888">72px</span></div>
+    </div>
+    <div class="fields-row">
+      <div class="field"><label>Police</label>
+        <select id="a-font">
+          <option value="'Syne',sans-serif">Syne</option>
+          <option value="'Georgia',serif">Georgia</option>
+          <option value="'Times New Roman',serif">Times New Roman</option>
+          <option value="'Courier New',monospace">Courier</option>
+          <option value="'Arial',sans-serif">Arial</option>
+          <option value="'Impact',sans-serif">Impact</option>
+        </select>
+      </div>
+      <div class="field"><label>Alignement</label>
+        <select id="a-text-align">
+          <option value="center">Centre</option>
+          <option value="left">Gauche</option>
+          <option value="right">Droite</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Position verticale</label>
+      <select id="a-pos-v">
+        <option value="center">Milieu</option>
+        <option value="flex-start">Haut</option>
+        <option value="flex-end">Bas</option>
+      </select>
+    </div>
+    <div class="field"><label>Decalage horizontal <span id="pos-h-val" style="color:#888">0%</span></label><input type="range" id="a-pos-h" min="-40" max="40" value="0" style="width:100%" oninput="document.getElementById('pos-h-val').textContent=this.value+'%';livePreview()"></div>
+    <div class="field"><label>Decalage vertical <span id="pos-v-val" style="color:#888">0%</span></label><input type="range" id="a-pos-v-offset" min="-30" max="30" value="0" style="width:100%" oninput="document.getElementById('pos-v-val').textContent=this.value+'%';livePreview()"></div>
+  </div>
+  <div class="admin-section">
+    <h3>Textes Hero</h3>
+    <div class="field"><label>Sous-titre</label><input type="text" id="a-eyebrow"></div>
+    <div class="fields-row">
+      <div class="field"><label>Titre principal</label><input type="text" id="a-title-main"></div>
+      <div class="field"><label>Titre secondaire</label><input type="text" id="a-title-sub"></div>
+    </div>
+    <div class="field"><label>Description</label><textarea id="a-desc"></textarea></div>
+    <div class="fields-row">
+      <div class="field"><label>Bouton 1</label><input type="text" id="a-btn1"></div>
+      <div class="field"><label>Bouton 2</label><input type="text" id="a-btn2"></div>
+    </div>
+  </div>
+  <div class="admin-section">
+    <h3>Projets</h3>
+    <div id="projects-admin-list"></div>
+    <button class="add-proj-btn" onclick="addProject()">+ Ajouter un projet</button>
+  </div>
+  <div class="admin-section">
+    <h3>Media A propos</h3>
+    <div class="field" style="margin-bottom:.75rem">
+      <label>Type de media</label>
+      <div style="display:flex;gap:.5rem">
+        <button onclick="setAboutMediaType('photo')" id="about-mtype-photo" class="mtype-btn mtype-active">📷 Photo</button>
+        <button onclick="setAboutMediaType('video')" id="about-mtype-video" class="mtype-btn">🎬 Video</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>🔗 Lien URL (image ou video en ligne)</label>
+      <input type="text" id="about-url-input" placeholder="https://exemple.com/photo.jpg">
+      <button class="add-proj-btn" style="margin-top:.4rem" onclick="applyAboutUrl()">Appliquer ce lien</button>
+    </div>
+    <div class="field"><label style="color:#444;font-size:.65rem">— OU uploader un fichier —</label></div>
+    <div class="upload-box" id="about-upload-box">
+      <input type="file" accept="image/*,video/*" id="upload-about" onchange="handleAboutMedia(this)">
+      <div class="upload-icon" id="about-upload-icon">📷</div>
+      <span class="upload-label" id="about-upload-label">Choisir une photo / video</span>
+      <span class="upload-name" id="about-img-data-name"></span>
+      <img class="preview-img" id="about-prev">
+      <video id="about-prev-video" style="width:100%;height:120px;object-fit:cover;border-radius:4px;margin-top:.5rem;display:none" muted autoplay loop playsinline></video>
+    </div>
+    <button class="reset-btn" onclick="resetAboutMedia()">✕ Supprimer le media</button>
+    <div style="margin-top:1rem">
+      <div class="field"><label>Localisation</label><input type="text" id="a-loc"></div>
+      <div class="field"><label>Paragraphe 1</label><textarea id="a-p1"></textarea></div>
+      <div class="field"><label>Paragraphe 2</label><textarea id="a-p2"></textarea></div>
+      <div class="fields-row"><div class="field"><label>Badge chiffre</label><input type="text" id="a-badge-n"></div><div class="field"><label>Badge label</label><input type="text" id="a-badge-l"></div></div>
+    </div>
+  </div>
+  <div class="admin-section">
+    <h3>Services</h3>
+    <div id="services-admin-list"></div>
+  </div>
+  <div class="admin-section">
+    <h3>Contact & Footer</h3>
+    <div class="fields-row"><div class="field"><label>Titre</label><input type="text" id="a-ctitle"></div><div class="field"><label>Sous-titre</label><input type="text" id="a-csub"></div></div>
+    <div class="field"><label>Description</label><textarea id="a-cdesc"></textarea></div>
+    <div class="fields-row"><div class="field"><label>Lien Instagram</label><input type="text" id="a-insta"></div><div class="field"><label>Email</label><input type="text" id="a-email"></div></div>
+    <div class="fields-row"><div class="field"><label>Copyright</label><input type="text" id="a-copy"></div><div class="field"><label>Localisation footer</label><input type="text" id="a-floc"></div></div>
+  </div>
+  <div class="admin-btns">
+    <button class="save-btn" onclick="saveAll()">Sauvegarder</button>
+    <button class="close-btn" onclick="closeAdmin()">Fermer</button>
+  </div>
+</div>
+</div>
+
+<script>
+const DEF={eyebrow:'Photographie · Video · Creation',titleMain:'Capturer',titleSub:"l'instant juste.",desc:"Images fixes et films qui revelement la lumiere et l'emotion vraie.",btn1:'Voir les projets',btn2:'Me contacter',loc:'Angers, France',p1:"Structure independante specialisee en photographie et production video.",p2:"De l'idee a la livraison, accompagnement de chaque projet avec rigueur.",badgeN:'10+',badgeL:"Annees d'experience",ctitle:'Donnons vie',csub:'a votre projet.',cdesc:'Disponible pour projets video, photo, evenementiel et collaborations creatives.',insta:'https://instagram.com',email:'contact@sideup.fr',copy:'2025 Side Up Production',floc:'Angers, France',titleColor:'#ffffff',subColor:'rgba(255,255,255,0.2)',descColor:'rgba(255,255,255,0.45)',titleSize:72,titleFont:"'Syne',sans-serif",textAlign:'center',textPosV:'center',textPosH:0,textPosVOffset:0,
+projects:[
+  {title:'Aftermovie Club',cat:'Video',year:'2024',img:'https://images.unsplash.com/photo-1571266028243-d220c9b7102d?q=80&w=800&auto=format&fit=crop'},
+  {title:'DJ Performance',cat:'Photo',year:'2024',img:'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?q=80&w=800&auto=format&fit=crop'},
+  {title:'Cinematic Reel',cat:'Video',year:'2023',img:'https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=800&auto=format&fit=crop'},
+  {title:'Reportage',cat:'Photo',year:'2024',img:'https://images.unsplash.com/photo-1501386761578-eac5c94b800a?q=80&w=800&auto=format&fit=crop'},
+  {title:'Brand Content',cat:'Video',year:'2023',img:'https://images.unsplash.com/photo-1499364615650-ec38552f4f34?q=80&w=800&auto=format&fit=crop'},
+  {title:'Social Campaign',cat:'Creation',year:'2024',img:'https://images.unsplash.com/photo-1521334884684-d80222895322?q=80&w=800&auto=format&fit=crop'}
+],
+services:[
+  {icon:'🎬',title:'Video evenementielle',desc:"Aftermovies, clips, reportages."},
+  {icon:'📸',title:'Photographie',desc:'Portrait, nuit, concert, corporate.'},
+  {icon:'🎧',title:'DJ Set',desc:'Sets electroniques pour clubs et festivals.'},
+  {icon:'📱',title:'Contenu digital',desc:'Contenus pour Instagram, TikTok, YouTube.'}
+]};
+
+
+// ── URL HANDLERS ──
+function getYoutubeEmbed(url){
+  // Convert youtube watch URL to embed
+  const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+  if(match) return 'https://www.youtube.com/embed/'+match[1]+'?autoplay=1&mute=1&loop=1&playlist='+match[1]+'&controls=0&showinfo=0';
+  const vimeo = url.match(/vimeo\.com\/(\d+)/);
+  if(vimeo) return 'https://player.vimeo.com/video/'+vimeo[1]+'?autoplay=1&muted=1&loop=1&background=1';
+  return null;
+}
+
+function applyHeroUrl(){
+  const url = document.getElementById('hero-url-input').value.trim();
+  if(!url) return;
+  const embed = getYoutubeEmbed(url);
+  const d = load();
+  if(embed){
+    // YouTube/Vimeo — use iframe
+    d.heroMediaType = 'iframe';
+    d.heroIframeSrc = embed;
+    save(d);
+    applyHeroIframe(embed);
+  } else {
+    // Direct URL (image or video)
+    const isVid = url.match(/\.(mp4|webm|mov|ogg)/i);
+    if(isVid){
+      d.heroMediaType = 'video';
+      const src=document.getElementById('hero-video-src');const vid=document.getElementById('hero-video');
+      if(src)src.src=url;if(vid){vid.style.display='block';vid.load();vid.play();}
+      const bg=document.getElementById('hero-bg-img');if(bg)bg.style.display='none';
+    } else {
+      d.heroMediaType = 'photo';
+      d.heroBgImgUrl = url;
+      const bg=document.getElementById('hero-bg-img');const vid=document.getElementById('hero-video');
+      if(bg){bg.src=url;bg.style.display='block';}if(vid)vid.style.display='none';
+    }
+    save(d);
+  }
+}
+
+function applyHeroIframe(src){
+  // Remove existing iframe
+  const existing = document.getElementById('hero-iframe');
+  if(existing) existing.remove();
+  const hero = document.querySelector('.hero');
+  const iframe = document.createElement('iframe');
+  iframe.id = 'hero-iframe';
+  iframe.src = src;
+  iframe.style.cssText = 'position:absolute;inset:-10%;width:120%;height:120%;border:none;pointer-events:none;opacity:.72';
+  iframe.allow = 'autoplay';
+  hero.insertBefore(iframe, hero.firstChild);
+  // hide video
+  const vid=document.getElementById('hero-video');if(vid)vid.style.display='none';
+  const bg=document.getElementById('hero-bg-img');if(bg)bg.style.display='none';
+}
+
+function previewHeroUrl(val){
+  // just show a small label
+  const nm = document.getElementById('video-name');
+  if(nm && val) nm.textContent = '🔗 '+val.substring(0,40)+'...';
+}
+
+function applyAboutUrl(){
+  const url = document.getElementById('about-url-input').value.trim();
+  if(!url) return;
+  const isVid = url.match(/\.(mp4|webm|mov|ogg)/i);
+  const d = load();
+  if(isVid){
+    d.aboutMediaType='video'; d['about-img-url']=url;
+    const v=document.getElementById('about-video');const img=document.getElementById('about-img');
+    if(v){v.src=url;v.style.display='block';}if(img)img.style.display='none';
+  } else {
+    d.aboutMediaType='photo'; d['about-img-url']=url;
+    const img=document.getElementById('about-img');const v=document.getElementById('about-video');
+    if(img){img.src=url;img.style.display='block';}if(v)v.style.display='none';
+  }
+  save(d);
+}
+
+function applyProjectUrl(idx){
+  const url = document.getElementById('purl-'+idx)?.value.trim();
+  if(!url) return;
+  const isVid = url.match(/\.(mp4|webm|mov|ogg)/i);
+  const d=load();
+  d.projects[idx].img=url;
+  d.projects[idx].mediaType=isVid?'video':'photo';
+  delete d.projects[idx].mediaKey;
+  save(d);
+  const prev=document.getElementById('pimg-prev-'+idx);if(prev){prev.src=url;prev.style.display='block';}
+  renderProjects(d.projects);
+}
+
+// ── INDEXEDDB pour les images (persistant) ──
+let db;
+function openDB(){
+  return new Promise((res,rej)=>{
+    const req=indexedDB.open('SideUpDB',1);
+    req.onupgradeneeded=e=>{e.target.result.createObjectStore('media',{keyPath:'key'});};
+    req.onsuccess=e=>{db=e.target.result;res(db);};
+    req.onerror=e=>rej(e);
+  });
+}
+function saveMedia(key,data){
+  return openDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction('media','readwrite');
+    tx.objectStore('media').put({key,data});
+    tx.oncomplete=res;tx.onerror=rej;
+  }));
+}
+function getMedia(key){
+  return openDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction('media','readonly');
+    const req=tx.objectStore('media').get(key);
+    req.onsuccess=e=>res(e.target.result?.data||null);
+    req.onerror=rej;
+  }));
+}
+function deleteMedia(key){
+  return openDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction('media','readwrite');
+    tx.objectStore('media').delete(key);
+    tx.oncomplete=res;tx.onerror=rej;
+  }));
+}
+function getAllMedia(){
+  return openDB().then(db=>new Promise((res,rej)=>{
+    const tx=db.transaction('media','readonly');
+    const req=tx.objectStore('media').getAll();
+    req.onsuccess=e=>{
+      const map={};e.target.result.forEach(r=>map[r.key]=r.data);res(map);
+    };
+    req.onerror=rej;
+  }));
+}
+
+function load(){
+  try{
+    const raw=JSON.parse(localStorage.getItem('sup')||'{}');
+    // strip large base64 from localStorage (now in IndexedDB)
+    const clean={};
+    Object.keys(raw).forEach(k=>{ if(typeof raw[k]==='string'&&raw[k].startsWith('data:')) return; clean[k]=raw[k]; });
+    return Object.assign({},DEF,clean);
+  }catch(e){return{...DEF};}
+}
+function save(d){
+  try{
+    const clean={};
+    Object.keys(d).forEach(k=>{ if(typeof d[k]==='string'&&d[k].startsWith('data:')) return; clean[k]=d[k]; });
+    localStorage.setItem('sup',JSON.stringify(clean));
+  }catch(e){console.warn('localStorage save error',e);}
+}
+function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+function v(id){const el=document.getElementById(id);return el?el.value:'';}
+
+function applyTextStyle(d){
+  const tc=document.getElementById('hero-content');
+  const tm=document.getElementById('hero-title-main');
+  const ts=document.getElementById('hero-title-sub');
+  const td=document.getElementById('hero-desc');
+  const hero=document.querySelector('.hero');
+  if(hero)hero.style.alignItems=d.textPosV||'center';
+  if(tc){tc.style.textAlign=d.textAlign||'center';tc.style.marginLeft=(d.textPosH||0)+'%';tc.style.marginTop=(d.textPosVOffset||0)+'%';}
+  if(tm){tm.style.color=d.titleColor||'#ffffff';tm.style.fontFamily=d.titleFont||"'Syne',sans-serif";tm.style.fontSize=(d.titleSize||72)+'px';}
+  if(ts){ts.style.color=d.subColor||'rgba(255,255,255,0.2)';ts.style.fontFamily=d.titleFont||"'Syne',sans-serif";ts.style.fontSize=(d.titleSize||72)+'px';}
+  if(td)td.style.color=d.descColor||'rgba(255,255,255,0.45)';
+}
+
+function renderSite(){
+  const d=load();
+  // Load all media from IndexedDB then render
+  getAllMedia().then(media=>{
+    // logo
+    if(media['logoData']){['site-logo','hero-logo'].forEach(id=>{const e=document.getElementById(id);if(e)e.src=media['logoData'];});}
+    // about
+    if(media['about-img-data']){
+      if(d.aboutMediaType==='video'){
+        const v=document.getElementById('about-video');const img=document.getElementById('about-img');
+        if(v){v.src=media['about-img-data'];v.style.display='block';}if(img)img.style.display='none';
+      } else {
+        const img=document.getElementById('about-img');if(img){img.src=media['about-img-data'];img.style.display='block';}
+        const v=document.getElementById('about-video');if(v)v.style.display='none';
+      }
+    }
+    // hero bg photo
+    if(media['heroBgImg']&&d.heroMediaType==='photo'){
+      const bg=document.getElementById('hero-bg-img');const vid=document.getElementById('hero-video');
+      if(bg){bg.src=media['heroBgImg'];bg.style.display='block';}if(vid)vid.style.display='none';
+    }
+    // projects
+    if(d.projects){
+      d.projects.forEach((p,i)=>{ if(media['proj-media-'+i]) p.img=media['proj-media-'+i]; });
+      renderProjects(d.projects);
+    }
+    // tickers
+    if(d.tickers){
+      d.tickers.forEach((t,i)=>{ if(media['ticker-logo-'+i]) t.value=media['ticker-logo-'+i]; });
+      renderTicker(d.tickers,d.tickerSpeed);
+    }
+  }).catch(()=>{
+    // fallback if IndexedDB fails
+    renderProjects(d.projects||[]);
+    renderTicker(d.tickers||DEF_TICKERS,d.tickerSpeed);
+  });
+  set('hero-eyebrow',d.eyebrow);set('hero-title-main',d.titleMain);set('hero-title-sub',d.titleSub);set('hero-desc',d.desc);
+  const b1=document.getElementById('hero-btn1');if(b1)b1.textContent=d.btn1;
+  const b2=document.getElementById('hero-btn2');if(b2)b2.textContent=d.btn2;
+  set('about-loc',d.loc);set('about-p1',d.p1);set('about-p2',d.p2);set('about-badge-n',d.badgeN);set('about-badge-l',d.badgeL);
+  set('contact-title',d.ctitle);set('contact-sub',d.csub);set('contact-desc',d.cdesc);set('footer-copy',d.copy);set('footer-loc',d.floc);
+  const ci=document.getElementById('contact-insta');if(ci)ci.href=d.insta;
+  const ce=document.getElementById('contact-email');if(ce)ce.href='mailto:'+d.email.replace('mailto:','');
+  // media loaded via IndexedDB above
+  // about media loaded via IndexedDB above
+  applyHeroMedia(d);
+  applyTextStyle(d);
+  applySpacingFromData(d);
+  renderTicker(d.tickers||DEF_TICKERS, d.tickerSpeed);
+  const tl=document.querySelector('.ticker-label');if(tl&&d.tickerLabel)tl.textContent=d.tickerLabel;
+  renderProjects(d.projects);
+  renderServices(d.services);
+}
+
+function renderProjects(p){
+  document.getElementById('projects-grid').innerHTML=p.map((x,i)=>{
+    const media = x.mediaType==='video'
+      ? `<video src="${x.img}" autoplay muted loop playsinline style="width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease;filter:grayscale(20%) brightness(.7)"></video>`
+      : `<img src="${x.img}" alt="${x.title}" loading="lazy">`;
+    return `<div class="proj-card" data-cat="${x.cat}">${media}<div class="proj-ov"><span class="proj-cat">${x.cat}</span><h3 class="proj-title">${x.title}</h3><p class="proj-year">${x.year}</p></div><span class="proj-num">${String(i+1).padStart(2,'0')}</span></div>`;
+  }).join('');
+}
+function renderServices(s){
+  document.getElementById('services-grid').innerHTML=s.map(x=>`<div class="svc-card"><div class="svc-icon">${x.icon}</div><h3>${x.title}</h3><p>${x.desc}</p></div>`).join('');
+}
+function filterCat(cat,btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');
+  let i=1;document.querySelectorAll('.proj-card').forEach(c=>{const s=cat==='Tous'||c.dataset.cat===cat;c.style.display=s?'block':'none';if(s)c.querySelector('.proj-num').textContent=String(i++).padStart(2,'0');});
+}
+
+function handleFile(input,dataKey,imgId,prevId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const data=e.target.result;
+    saveMedia(dataKey,data).then(()=>{
+      const el=document.getElementById(imgId);if(el)el.src=data;
+      const prev=document.getElementById(prevId);if(prev){prev.src=data;prev.style.display='block';}
+      const nm=document.getElementById(dataKey+'-name');if(nm)nm.textContent='✓ '+file.name;
+    });
+  };reader.readAsDataURL(file);
+}
+function handleVideo(input){
+  const file=input.files[0];if(!file)return;
+  const url=URL.createObjectURL(file);
+  const src=document.getElementById('hero-video-src');const vid=document.getElementById('hero-video');
+  if(src)src.src=url;if(vid){vid.load();vid.play();}
+  const prev=document.getElementById('preview-video');if(prev){prev.src=url;prev.style.display='block';}
+  document.getElementById('video-name').textContent='✓ '+file.name;
+}
+function resetMedia(dataKey,imgId,defaultSrc,prevId){
+  deleteMedia(dataKey).then(()=>{
+    const el=document.getElementById(imgId);if(el)el.src=defaultSrc;
+    const prev=document.getElementById(prevId);if(prev){prev.src='';prev.style.display='none';}
+  });
+}
+// resetVideo replaced by resetHeroMedia
+function resetLogo(){
+  deleteMedia('logoData').then(()=>{
+    ['site-logo','hero-logo'].forEach(id=>{const e=document.getElementById(id);if(e)e.src='Side_Up_production.png';});
+    const prev=document.getElementById('logo-preview');if(prev){prev.src='';prev.style.display='none';}
+  });
+}
+function resetProjectImg(idx){
+  const def='https://images.unsplash.com/photo-1571266028243-d220c9b7102d?q=80&w=800&auto=format&fit=crop';
+  deleteMedia('proj-media-'+idx).then(()=>{
+    const d=load();if(d.projects[idx]){d.projects[idx].img=def;delete d.projects[idx].mediaKey;}save(d);
+    const prev=document.getElementById('pimg-prev-'+idx);if(prev)prev.src=def;
+    document.getElementById('pimg-name-'+idx).textContent='';renderProjects(d.projects);
+  });
+}
+
+function livePreview(){
+  set('hero-eyebrow',v('a-eyebrow')||'');
+  const tm=document.getElementById('hero-title-main');if(tm&&v('a-title-main'))tm.textContent=v('a-title-main');
+  const ts=document.getElementById('hero-title-sub');if(ts&&v('a-title-sub'))ts.textContent=v('a-title-sub');
+  set('hero-desc',v('a-desc')||'');
+  const b1=document.getElementById('hero-btn1');if(b1&&v('a-btn1'))b1.textContent=v('a-btn1');
+  const b2=document.getElementById('hero-btn2');if(b2&&v('a-btn2'))b2.textContent=v('a-btn2');
+  set('about-loc',v('a-loc')||'');set('about-p1',v('a-p1')||'');set('about-p2',v('a-p2')||'');
+  set('about-badge-n',v('a-badge-n')||'');set('about-badge-l',v('a-badge-l')||'');
+  set('contact-title',v('a-ctitle')||'');set('contact-sub',v('a-csub')||'');set('contact-desc',v('a-cdesc')||'');
+  set('footer-copy',v('a-copy')||'');set('footer-loc',v('a-floc')||'');
+  const tc=document.getElementById('hero-content');
+  const tMain=document.getElementById('hero-title-main');
+  const tSub=document.getElementById('hero-title-sub');
+  const tDesc=document.getElementById('hero-desc');
+  const hero=document.querySelector('.hero');
+  const tc2=document.getElementById('a-title-color');if(tc2&&tMain)tMain.style.color=tc2.value;
+  const sc=document.getElementById('a-sub-color');if(sc&&tSub)tSub.style.color=sc.value;
+  const dc=document.getElementById('a-desc-color');if(dc&&tDesc)tDesc.style.color=dc.value;
+  const sz=document.getElementById('a-title-size');
+  if(sz){if(tMain)tMain.style.fontSize=sz.value+'px';if(tSub)tSub.style.fontSize=sz.value+'px';}
+  const fn=document.getElementById('a-font');if(fn){if(tMain)tMain.style.fontFamily=fn.value;if(tSub)tSub.style.fontFamily=fn.value;}
+  const al=document.getElementById('a-text-align');if(al&&tc)tc.style.textAlign=al.value;
+  const pv=document.getElementById('a-pos-v');if(pv&&hero)hero.style.alignItems=pv.value;
+  const ph=document.getElementById('a-pos-h');if(ph&&tc)tc.style.marginLeft=ph.value+'%';
+  const pvo=document.getElementById('a-pos-v-offset');if(pvo&&tc)tc.style.marginTop=pvo.value+'%';
+}
+
+function openAdmin(){
+  const d=load();
+  document.getElementById('a-eyebrow').value=d.eyebrow||'';
+  document.getElementById('a-title-main').value=d.titleMain||'';
+  document.getElementById('a-title-sub').value=d.titleSub||'';
+  document.getElementById('a-desc').value=d.desc||'';
+  document.getElementById('a-btn1').value=d.btn1||'';document.getElementById('a-btn2').value=d.btn2||'';
+  document.getElementById('a-loc').value=d.loc||'';document.getElementById('a-p1').value=d.p1||'';document.getElementById('a-p2').value=d.p2||'';
+  document.getElementById('a-badge-n').value=d.badgeN||'';document.getElementById('a-badge-l').value=d.badgeL||'';
+  document.getElementById('a-ctitle').value=d.ctitle||'';document.getElementById('a-csub').value=d.csub||'';
+  document.getElementById('a-cdesc').value=d.cdesc||'';document.getElementById('a-insta').value=d.insta||'';
+  document.getElementById('a-email').value=d.email||'';document.getElementById('a-copy').value=d.copy||'';document.getElementById('a-floc').value=d.floc||'';
+  const sz=d.titleSize||72;
+  document.getElementById('a-title-color').value=d.titleColor||'#ffffff';
+  document.getElementById('a-sub-color').value=d.subColor||'#333333';
+  document.getElementById('a-desc-color').value=d.descColor||'#aaaaaa';
+  document.getElementById('a-title-size').value=sz;document.getElementById('title-size-val').textContent=sz+'px';
+  document.getElementById('a-font').value=d.titleFont||"'Syne',sans-serif";
+  document.getElementById('a-text-align').value=d.textAlign||'center';
+  document.getElementById('a-pos-v').value=d.textPosV||'center';
+  document.getElementById('a-pos-h').value=d.textPosH||0;document.getElementById('pos-h-val').textContent=(d.textPosH||0)+'%';
+  document.getElementById('a-pos-v-offset').value=d.textPosVOffset||0;document.getElementById('pos-v-val').textContent=(d.textPosVOffset||0)+'%';
+  if(d.logoData){const p=document.getElementById('logo-preview');if(p){p.src=d.logoData;p.style.display='block';}}
+  if(d['about-img-data']){const p=document.getElementById('about-prev');if(p){p.src=d['about-img-data'];p.style.display='block';}}
+  renderProjectsAdmin(d.projects);renderServicesAdmin(d.services);
+  loadSpacingIntoAdmin(d);
+  const tickers=d.tickers||DEF_TICKERS;
+  renderTickerAdmin(tickers);
+  const heroUrl=document.getElementById('hero-url-input');if(heroUrl)heroUrl.value=d.heroIframeSrc||d.heroBgImgUrl||'';
+  const aboutUrl=document.getElementById('about-url-input');if(aboutUrl)aboutUrl.value=d['about-img-url']||'';
+  const speedEl=document.getElementById('ticker-speed');if(speedEl)speedEl.value=d.tickerSpeed||'25s';
+  const lblEl=document.getElementById('ticker-label-text');if(lblEl)lblEl.value=d.tickerLabel||'Ils nous ont fait confiance';
+  document.getElementById('admin-overlay').style.display='block';document.body.style.overflow='hidden';
+  setTimeout(()=>{document.querySelectorAll('#admin-panel input,#admin-panel textarea,#admin-panel select').forEach(el=>{el.addEventListener('input',livePreview);el.addEventListener('change',livePreview);});},50);
+}
+function closeAdmin(){document.getElementById('admin-overlay').style.display='none';document.body.style.overflow='';}
+
+function renderProjectsAdmin(projects){
+  document.getElementById('projects-admin-list').innerHTML=projects.map((p,i)=>{
+    const isVid = p.mediaType==='video';
+    const previewEl = isVid
+      ? `<video id="pimg-prev-${i}" style="width:100%;height:120px;object-fit:cover;border-radius:4px;margin-top:.5rem;display:${p.img?'block':'none'}" src="${p.img||''}" muted autoplay loop playsinline></video>`
+      : `<img class="preview-img" id="pimg-prev-${i}" ${p.img?`src="${p.img}" style="display:block"`:''}">`;
+    return `<div class="proj-admin">
+      <div class="proj-admin-head"><span>Projet ${i+1} — ${p.title}</span><button class="del-btn" onclick="removeProject(${i})">✕</button></div>
+      <div class="field" style="margin-bottom:.75rem">
+        <label>Type de media</label>
+        <div style="display:flex;gap:.5rem">
+          <button onclick="setProjectMediaType(${i},'photo')" id="pmtype-photo-${i}" class="mtype-btn ${!isVid?'mtype-active':''}">📷 Photo</button>
+          <button onclick="setProjectMediaType(${i},'video')" id="pmtype-video-${i}" class="mtype-btn ${isVid?'mtype-active':''}">🎬 Video</button>
+        </div>
+      </div>
+      <div class="upload-box" style="margin-bottom:.8rem">
+        <input type="file" accept="${isVid?'video/*':'image/*'}" id="pfile-${i}" onchange="handleProjectMedia(this,${i})">
+        <div class="upload-icon">${isVid?'🎬':'📷'}</div>
+        <span class="upload-label">${isVid?'Choisir une video':'Choisir une photo'}</span>
+        <span class="upload-name" id="pimg-name-${i}"></span>
+        ${previewEl}
+      </div>
+      <button class="reset-btn" onclick="resetProjectImg(${i})">✕ Supprimer le media</button>
+      <div class="fields-row"><div class="field"><label>Titre</label><input type="text" id="p${i}-title" value="${p.title}"></div><div class="field"><label>Categorie</label><select id="p${i}-cat"><option ${p.cat==='Video'?'selected':''}>Video</option><option ${p.cat==='Photo'?'selected':''}>Photo</option><option ${p.cat==='Creation'?'selected':''}>Creation</option></select></div></div>
+      <div class="field"><label>Annee</label><input type="text" id="p${i}-year" value="${p.year}" style="max-width:120px"></div>
+    </div>`;
+  }).join('');
+}
+function handleProjectMedia(input,idx){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const data=e.target.result;
+    const key='proj-media-'+idx;
+    const isVid=file.type.startsWith('video');
+    saveMedia(key,data).then(()=>{
+      const d=load();
+      d.projects[idx].mediaKey=key;
+      d.projects[idx].mediaType=isVid?'video':'photo';
+      d.projects[idx].img=data; // keep for immediate render
+      save(d);
+      const prev=document.getElementById('pimg-prev-'+idx);
+      if(prev){prev.src=data;prev.style.display='block';}
+      document.getElementById('pimg-name-'+idx).textContent='✓ '+file.name;
+      renderProjects(d.projects);
+    });
+  };reader.readAsDataURL(file);
+}
+
+function setProjectMediaType(idx, type){
+  const d=load();
+  d.projects[idx].mediaType=type;
+  save(d);
+  openAdmin();
+  // scroll to same position
+  setTimeout(()=>{ const el=document.getElementById('pfile-'+idx); if(el)el.scrollIntoView({behavior:'smooth',block:'center'}); },100);
+}
+
+function renderServicesAdmin(services){
+  document.getElementById('services-admin-list').innerHTML=services.map((s,i)=>`<div class="proj-admin"><div class="fields-row"><div class="field"><label>Emoji</label><input type="text" id="sv${i}-icon" value="${s.icon}"></div><div class="field"><label>Titre</label><input type="text" id="sv${i}-title" value="${s.title}"></div></div><div class="field"><label>Description</label><textarea id="sv${i}-desc">${s.desc}</textarea></div></div>`).join('');
+}
+function addProject(){const d=load();d.projects.push({title:'Nouveau projet',cat:'Video',year:'2024',img:'https://images.unsplash.com/photo-1571266028243-d220c9b7102d?q=80&w=800&auto=format&fit=crop'});save(d);openAdmin();setTimeout(()=>{document.getElementById('admin-overlay').scrollTo(0,99999);},100);}
+function removeProject(i){const d=load();d.projects.splice(i,1);save(d);openAdmin();}
+
+function saveAll(){
+  const d=load();
+  d.eyebrow=v('a-eyebrow');d.titleMain=v('a-title-main');d.titleSub=v('a-title-sub');d.desc=v('a-desc');d.btn1=v('a-btn1');d.btn2=v('a-btn2');
+  d.loc=v('a-loc');d.p1=v('a-p1');d.p2=v('a-p2');d.badgeN=v('a-badge-n');d.badgeL=v('a-badge-l');
+  d.ctitle=v('a-ctitle');d.csub=v('a-csub');d.cdesc=v('a-cdesc');d.insta=v('a-insta');d.email=v('a-email');d.copy=v('a-copy');d.floc=v('a-floc');
+  d.titleColor=document.getElementById('a-title-color').value;
+  d.subColor=document.getElementById('a-sub-color').value;
+  d.descColor=document.getElementById('a-desc-color').value;
+  d.titleSize=document.getElementById('a-title-size').value;
+  d.titleFont=document.getElementById('a-font').value;
+  d.textAlign=document.getElementById('a-text-align').value;
+  d.textPosV=document.getElementById('a-pos-v').value;
+  d.textPosH=document.getElementById('a-pos-h').value;
+  d.textPosVOffset=document.getElementById('a-pos-v-offset').value;
+  document.querySelectorAll('.proj-admin').forEach((_,i)=>{if(d.projects[i]&&document.getElementById('p'+i+'-title')){d.projects[i].title=v('p'+i+'-title');const c=document.getElementById('p'+i+'-cat');if(c)d.projects[i].cat=c.value;d.projects[i].year=v('p'+i+'-year');}});
+  d.services=[0,1,2,3].filter(i=>document.getElementById('sv'+i+'-icon')).map(i=>({icon:v('sv'+i+'-icon'),title:v('sv'+i+'-title'),desc:v('sv'+i+'-desc')}));
+  saveSpacing(d);
+  const sp=document.getElementById('ticker-speed');if(sp)d.tickerSpeed=sp.value;
+  const tl=document.getElementById('ticker-label-text');if(tl)d.tickerLabel=tl.value;
+  save(d);renderSite();const t=document.getElementById('toast');t.textContent='✓ Sauvegarde permanente !';t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+
+
+
+function setHeroMediaType(type){
+  const d=load();d.heroMediaType=type;save(d);
+  document.querySelectorAll('#hero-mtype-video,#hero-mtype-photo').forEach(b=>b.classList.remove('mtype-active'));
+  document.getElementById('hero-mtype-'+type)?.classList.add('mtype-active');
+  const lbl=document.getElementById('hero-upload-label');const ico=document.getElementById('hero-upload-icon');
+  if(lbl)lbl.textContent=type==='photo'?'Choisir une photo':'Choisir une video';
+  if(ico)ico.textContent=type==='photo'?'📷':'🎬';
+  applyHeroMedia(d);
+}
+
+function handleHeroMedia(input){
+  const file=input.files[0];if(!file)return;
+  const isVid=file.type.startsWith('video');
+  if(isVid){
+    const url=URL.createObjectURL(file);
+    const src=document.getElementById('hero-video-src');const vid=document.getElementById('hero-video');
+    if(src)src.src=url;if(vid){vid.style.display='block';vid.load();vid.play();}
+    const bg=document.getElementById('hero-bg-img');if(bg)bg.style.display='none';
+    document.getElementById('video-name').textContent='✓ '+file.name;
+    const prev=document.getElementById('preview-video');if(prev){prev.src=url;prev.style.display='block';}
+    document.getElementById('preview-hero-img').style.display='none';
+  } else {
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const data=e.target.result;const d=load();d.heroBgImg=data;d.heroMediaType='photo';save(d);
+      const bg=document.getElementById('hero-bg-img');if(bg){bg.src=data;bg.style.display='block';}
+      const vid=document.getElementById('hero-video');if(vid)vid.style.display='none';
+      const prev=document.getElementById('preview-hero-img');if(prev){prev.src=data;prev.style.display='block';}
+      document.getElementById('preview-video').style.display='none';
+      document.getElementById('video-name').textContent='✓ '+file.name;
+    };reader.readAsDataURL(file);
+  }
+}
+
+function applyHeroMedia(d){
+  const vid=document.getElementById('hero-video');const bg=document.getElementById('hero-bg-img');
+  if(d.heroMediaType==='iframe'&&d.heroIframeSrc){
+    applyHeroIframe(d.heroIframeSrc);
+  } else if(d.heroMediaType==='photo'&&(d.heroBgImg||d.heroBgImgUrl)){
+    const src=d.heroBgImg||d.heroBgImgUrl;
+    if(bg){bg.src=src;bg.style.display='block';}if(vid)vid.style.display='none';
+    document.getElementById('hero-mtype-photo')?.classList.add('mtype-active');
+    document.getElementById('hero-mtype-video')?.classList.remove('mtype-active');
+  } else {
+    if(vid)vid.style.display='block';if(bg)bg.style.display='none';
+  }
+}
+
+function resetHeroMedia(){
+  const d=load();delete d.heroBgImg;d.heroMediaType='video';save(d);
+  const src=document.getElementById('hero-video-src');const vid=document.getElementById('hero-video');
+  if(src)src.src='sco_ffi0.mp4';if(vid){vid.style.display='block';vid.load();vid.play();}
+  const bg=document.getElementById('hero-bg-img');if(bg){bg.src='';bg.style.display='none';}
+  const prev=document.getElementById('preview-video');if(prev){prev.src='';prev.style.display='none';}
+  document.getElementById('preview-hero-img').style.display='none';
+  document.getElementById('video-name').textContent='';
+}
+function setAboutMediaType(type){
+  const d=load(); d.aboutMediaType=type; save(d);
+  document.querySelectorAll('#about-mtype-photo,#about-mtype-video').forEach(b=>b.classList.remove('mtype-active'));
+  document.getElementById('about-mtype-'+type)?.classList.add('mtype-active');
+  const lbl=document.getElementById('about-upload-label');
+  const ico=document.getElementById('about-upload-icon');
+  if(lbl)lbl.textContent=type==='video'?'Choisir une video':'Choisir une photo';
+  if(ico)ico.textContent=type==='video'?'🎬':'📷';
+}
+
+function handleAboutMedia(input){
+  const file=input.files[0];if(!file)return;
+  const isVid=file.type.startsWith('video');
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const data=e.target.result;
+    saveMedia('about-img-data',data).then(()=>{
+    const d=load();
+    d.aboutMediaType=isVid?'video':'photo';
+    save(d);
+    if(isVid){
+      const v=document.getElementById('about-video');const img=document.getElementById('about-img');
+      if(v){v.src=data;v.style.display='block';}if(img)img.style.display='none';
+      const pv=document.getElementById('about-prev-video');if(pv){pv.src=data;pv.style.display='block';}
+      const pi=document.getElementById('about-prev');if(pi)pi.style.display='none';
+    } else {
+      const img=document.getElementById('about-img');const v=document.getElementById('about-video');
+      if(img){img.src=data;img.style.display='block';}if(v)v.style.display='none';
+      const pi=document.getElementById('about-prev');if(pi){pi.src=data;pi.style.display='block';}
+      const pv=document.getElementById('about-prev-video');if(pv)pv.style.display='none';
+    }
+    document.getElementById('about-img-data-name').textContent='✓ '+file.name;
+    });
+  };
+  reader.readAsDataURL(file);
+}
+
+function resetAboutMedia(){
+  const def='https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?q=80&w=900&auto=format&fit=crop';
+  const d=load();delete d['about-img-data'];d.aboutMediaType='photo';save(d);
+  const img=document.getElementById('about-img');if(img){img.src=def;img.style.display='block';}
+  const v=document.getElementById('about-video');if(v){v.src='';v.style.display='none';}
+  const pi=document.getElementById('about-prev');if(pi){pi.src='';pi.style.display='none';}
+}
+
+
+// TICKER
+const DEF_TICKERS = [
+  {type:'text', value:'Angers SCO'},
+  {type:'text', value:'Ville d Angers'},
+  {type:'text', value:'Radio Nova'},
+  {type:'text', value:'Red Bull'},
+  {type:'text', value:'Nike'},
+  {type:'text', value:'Decathlon'},
+];
+
+function renderTicker(tickers, speed){
+  const track = document.getElementById('ticker-track');
+  if(!track) return;
+  // duplicate for infinite loop
+  const all = [...tickers, ...tickers];
+  track.innerHTML = all.map(t => {
+    if(t.type === 'logo' && t.value){
+      return `<img class="ticker-logo" src="${t.value}" alt="${t.name||''}">`;
+    }
+    return `<span class="ticker-text">${t.value}</span>`;
+  }).join('<span style="color:rgba(255,255,255,.1);font-size:.8rem">·</span>');
+  track.style.animationDuration = speed || '25s';
+  // update label
+  const d = load();
+  const lbl = document.querySelector('.ticker-label');
+  if(lbl && d.tickerLabel) lbl.textContent = d.tickerLabel;
+}
+
+function renderTickerAdmin(tickers){
+  document.getElementById('ticker-admin-list').innerHTML = tickers.map((t,i) => `
+    <div class="proj-admin" style="padding:.75rem 1rem">
+      <div style="display:flex;gap:.5rem;margin-bottom:.6rem">
+        <button onclick="setTickerType(${i},'text')" class="mtype-btn ${t.type!=='logo'?'mtype-active':''}">✏️ Texte</button>
+        <button onclick="setTickerType(${i},'logo')" class="mtype-btn ${t.type==='logo'?'mtype-active':''}">🖼 Logo</button>
+        <button onclick="removeTicker(${i})" class="del-btn" style="margin-left:auto">✕</button>
+      </div>
+      ${t.type==='logo' ? `
+        <div style="background:rgba(255,255,255,.04);border:.5px solid rgba(255,255,255,.08);border-radius:4px;padding:.6rem .8rem;margin-bottom:.5rem">
+          <p style="font-size:.65rem;color:#666;letter-spacing:.06em">📐 Taille recommandée : <strong style="color:#aaa">200 × 80 px</strong> — Format PNG avec fond transparent de préférence</p>
+        </div>
+        <div class="upload-box" style="padding:.6rem">
+          <input type="file" accept="image/*" onchange="handleTickerLogo(this,${i})">
+          <span class="upload-label" style="font-size:.65rem">Cliquer pour uploader le logo</span>
+          ${t.value ? `<img src="${t.value}" style="height:30px;margin-top:.4rem;filter:brightness(10) opacity(.6)">` : ''}
+        </div>
+        <div class="field" style="margin-top:.5rem"><label>Nom (optionnel)</label><input type="text" id="ticker-name-${i}" value="${t.name||''}" placeholder="Nom de l entreprise" oninput="updateTickerName(${i},this.value)"></div>
+      ` : `
+        <div class="field"><label>Nom de l entreprise</label><input type="text" id="ticker-val-${i}" value="${t.value||''}" placeholder="Ex: Nike" oninput="updateTickerVal(${i},this.value)"></div>
+      `}
+    </div>`).join('');
+}
+
+function addTicker(){
+  const d=load();
+  if(!d.tickers) d.tickers=[...DEF_TICKERS];
+  d.tickers.push({type:'text',value:'Nouveau client'});
+  save(d);
+  renderTickerAdmin(d.tickers);
+  renderTicker(d.tickers, d.tickerSpeed);
+}
+
+function removeTicker(i){
+  const d=load();
+  if(!d.tickers) d.tickers=[...DEF_TICKERS];
+  d.tickers.splice(i,1);save(d);
+  renderTickerAdmin(d.tickers);
+  renderTicker(d.tickers, d.tickerSpeed);
+}
+
+function setTickerType(i,type){
+  const d=load();if(!d.tickers)d.tickers=[...DEF_TICKERS];
+  d.tickers[i].type=type;save(d);
+  renderTickerAdmin(d.tickers);
+}
+
+function updateTickerVal(i,val){
+  const d=load();if(!d.tickers)d.tickers=[...DEF_TICKERS];
+  d.tickers[i].value=val;save(d);
+  renderTicker(d.tickers,d.tickerSpeed);
+}
+
+function updateTickerName(i,val){
+  const d=load();if(!d.tickers)d.tickers=[...DEF_TICKERS];
+  d.tickers[i].name=val;save(d);
+}
+
+function handleTickerLogo(input,i){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const data=e.target.result;
+    const key='ticker-logo-'+i;
+    saveMedia(key,data).then(()=>{
+      const d=load();if(!d.tickers)d.tickers=[...DEF_TICKERS];
+      d.tickers[i].value=data;d.tickers[i].mediaKey=key;save(d);
+      renderTickerAdmin(d.tickers);
+      renderTicker(d.tickers,d.tickerSpeed);
+    });
+  };reader.readAsDataURL(file);
+}
+
+// SPACING
+function updateSpacing(){
+  const get = id => parseInt(document.getElementById(id)?.value||0);
+  const setVal = (id,val,unit) => { const el=document.getElementById(id+'-val'); if(el) el.textContent=val+(unit||'px'); };
+
+  const heroGap = get('sp-hero');
+  const projT = get('sp-proj-t'), projB = get('sp-proj-b');
+  const aboutT = get('sp-about-t'), aboutB = get('sp-about-b');
+  const svcT = get('sp-svc-t'), svcB = get('sp-svc-b');
+  const devT = get('sp-dev-t'), devB = get('sp-dev-b');
+  const conT = get('sp-con-t'), conB = get('sp-con-b');
+  const heroH = get('sp-hero-h');
+
+  setVal('sp-hero', heroGap); setVal('sp-proj-t', projT); setVal('sp-proj-b', projB);
+  setVal('sp-about-t', aboutT); setVal('sp-about-b', aboutB);
+  setVal('sp-svc-t', svcT); setVal('sp-svc-b', svcB);
+  setVal('sp-dev-t', devT); setVal('sp-dev-b', devB);
+  setVal('sp-con-t', conT); setVal('sp-con-b', conB);
+  document.getElementById('sp-hero-h-val').textContent = heroH+'vh';
+
+  // apply
+  const hero = document.querySelector('.hero'); if(hero) hero.style.height = heroH+'vh';
+  const projEl = document.getElementById('projets'); if(projEl){ projEl.style.paddingTop=projT+'px'; projEl.style.paddingBottom=projB+'px'; }
+  const aboutWrap = document.getElementById('about-wrap'); if(aboutWrap){ aboutWrap.style.paddingTop=aboutT+'px'; aboutWrap.style.paddingBottom=aboutB+'px'; }
+  const svcWrap = document.getElementById('services-wrap'); if(svcWrap){ svcWrap.style.paddingTop=svcT+'px'; svcWrap.style.paddingBottom=svcB+'px'; }
+  const devWrap = document.getElementById('devis-wrap'); if(devWrap){ devWrap.style.paddingTop=devT+'px'; devWrap.style.paddingBottom=devB+'px'; }
+  const conInner = document.querySelector('.contact-inner'); if(conInner){ conInner.style.paddingTop=conT+'px'; conInner.style.paddingBottom=conB+'px'; }
+  const heroSect = document.querySelector('.hero'); if(heroSect) heroSect.style.marginBottom=heroGap+'px';
+}
+
+function applySpacingFromData(d){
+  if(!d.spacing) return;
+  const s=d.spacing;
+  const ids=['sp-hero','sp-proj-t','sp-proj-b','sp-about-t','sp-about-b','sp-svc-t','sp-svc-b','sp-dev-t','sp-dev-b','sp-con-t','sp-con-b','sp-hero-h'];
+  ids.forEach(id=>{ const el=document.getElementById(id); if(el&&s[id]!==undefined) el.value=s[id]; });
+  updateSpacing();
+}
+
+function loadSpacingIntoAdmin(d){
+  if(!d.spacing) return;
+  const s=d.spacing;
+  const ids=['sp-hero','sp-proj-t','sp-proj-b','sp-about-t','sp-about-b','sp-svc-t','sp-svc-b','sp-dev-t','sp-dev-b','sp-con-t','sp-con-b','sp-hero-h'];
+  ids.forEach(id=>{ const el=document.getElementById(id); if(el&&s[id]!==undefined){ el.value=s[id]; } });
+  updateSpacing();
+}
+
+function saveSpacing(d){
+  const ids=['sp-hero','sp-proj-t','sp-proj-b','sp-about-t','sp-about-b','sp-svc-t','sp-svc-b','sp-dev-t','sp-dev-b','sp-con-t','sp-con-b','sp-hero-h'];
+  d.spacing={};
+  ids.forEach(id=>{ const el=document.getElementById(id); if(el) d.spacing[id]=el.value; });
+}
+
+// FORM
+document.getElementById('devis-form').addEventListener('submit',async function(e){
+  e.preventDefault();const btn=document.getElementById('submit-btn');btn.disabled=true;btn.textContent='Envoi...';
+  try{const res=await fetch(this.action,{method:'POST',body:new FormData(this),headers:{Accept:'application/json'}});
+    if(res.ok){document.getElementById('devis-form').style.display='none';document.getElementById('form-success').style.display='block';}
+    else{btn.disabled=false;btn.textContent='Envoyer ma demande';alert('Verifiez votre ID Formspree.');}
+  }catch(err){btn.disabled=false;btn.textContent='Envoyer ma demande';}
+});
+
+// SECRET : 5 clics sur le logo
+let _cc=0,_ct=null;
+document.querySelector('.nav-logo img').addEventListener('click',()=>{
+  _cc++;clearTimeout(_ct);_ct=setTimeout(()=>{_cc=0;},2000);
+  if(_cc>=5){_cc=0;const pwd=prompt('Mot de passe :');if(pwd==='sideup2025')openAdmin();else if(pwd!==null)alert('Incorrect.');}
+});
+
+
+function toggleMenu(){
+  const h=document.getElementById('hamburger');
+  const m=document.getElementById('mobile-menu');
+  h.classList.toggle('open');
+  m.classList.toggle('open');
+  document.body.style.overflow=m.classList.contains('open')?'hidden':'';
+}
+window.addEventListener('scroll',()=>{document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>60);});
+const obs=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:.1});
+document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
+renderSite();
+</script>
+</body>
+</html>
