@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "historyId": "0e7d130c-bb27-48ad-9434-42f563b09d23",
+  "currentRevision": null,
+  "pendingChanges": false,
+  "files": {
+    "index.html": {
+      "hash": "82ba045916190828fefb3a31e68e29e2711f042bdb999e1e9c61c902c28d1142",
+      "content": "/root/.cache/hyperframes/history/0e7d130c-bb27-48ad-9434-42f563b09d23/blobs/82/82ba045916190828fefb3a31e68e29e2711f042bdb999e1e9c61c902c28d1142"
+    },
+    "assets/bg.mp4": {
+      "hash": "9ced49048f9bb950e2cd337b99ff86c2d99cb7bbef6611a24f1e53d6220f139c",
+      "content": "/root/.cache/hyperframes/history/0e7d130c-bb27-48ad-9434-42f563b09d23/blobs/9c/9ced49048f9bb950e2cd337b99ff86c2d99cb7bbef6611a24f1e53d6220f139c"
+    },
+    "assets/source.mov": {
+      "hash": "348f9c8cd3bf4c7b53190de76c336b34fc462fce399b8388880670f761b26173",
+      "content": "/root/.cache/hyperframes/history/0e7d130c-bb27-48ad-9434-42f563b09d23/blobs/34/348f9c8cd3bf4c7b53190de76c336b34fc462fce399b8388880670f761b26173"
+    }
+  },
+  "revisions": {},
+  "checks": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  },
+  "snapshots": {
+    "latest": null,
+    "revisions": {},
+    "unversioned": []
+  }
+}

@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Test Monteur - SCO</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      body {
+        margin: 0;
+        background: #000;
+        color: #fff;
+        font-family: system-ui, sans-serif;
+      }
+      #root {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background: #000;
+      }
+      #bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        
+      }
+      #main {
+        position: absolute;
+        left: 0;
+        top: 656px;
+        width: 1080px;
+        height: 608px;
+        object-fit: cover;
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+      }
+      .top {
+        position: absolute;
+        left: 72px;
+        right: 72px;
+        top: 260px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .kicker {
+        display: block;
+        font-size: 34px;
+        font-weight: 700;
+        letter-spacing: 10px;
+        color: #f2c94c;
+      }
+      .big {
+        display: block;
+        font-size: 138px;
+        line-height: 0.92;
+        font-weight: 900;
+        letter-spacing: -2px;
+        text-transform: uppercase;
+      }
+      .bar {
+        display: block;
+        width: 220px;
+        height: 10px;
+        background: #f2c94c;
+      }
+      .bottom {
+        position: absolute;
+        left: 72px;
+        right: 72px;
+        top: 1340px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .tag {
+        display: block;
+        font-size: 64px;
+        font-weight: 900;
+        text-transform: uppercase;
+      }
+      .tag em {
+        font-style: normal;
+        color: #f2c94c;
+      }
+      .sub {
+        display: block;
+        font-size: 36px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.8);
+      }
+      #end {
+        background: #0b0b0b;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+      }
+      #end .brand {
+        display: block;
+        font-size: 120px;
+        font-weight: 900;
+        line-height: 0.95;
+        text-align: center;
+        text-transform: uppercase;
+      }
+      #end .brand em {
+        font-style: normal;
+        color: #f2c94c;
+      }
+      #end .handle {
+        display: block;
+        font-size: 40px;
+        font-weight: 600;
+        letter-spacing: 4px;
+        color: rgba(255, 255, 255, 0.75);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-width="1080"
+      data-height="1920"
+      data-duration="30"
+    >
+      <video
+        id="bg"
+        class="clip"
+        src="assets/bg.mp4"
+        muted
+        playsinline
+        data-start="0"
+        data-duration="27"
+        data-track-index="0"
+      ></video>
+      <video
+        id="main"
+        class="clip"
+        src="assets/source.mov"
+        playsinline
+        data-has-audio="true"
+        data-start="0"
+        data-duration="27"
+        data-track-index="1"
+        data-volume="1"
+      ></video>
+
+      <div id="titles-a" class="layer clip" data-start="0" data-duration="9" data-track-index="2">
+        <div class="top">
+          <span class="kicker" id="a-kicker">LIGUE 1 · STADE RAYMOND-KOPA</span>
+          <span class="big" id="a-big1">Angers</span>
+          <span class="big" id="a-big2">vs Marseille</span>
+          <span class="bar" id="a-bar"></span>
+        </div>
+      </div>
+
+      <div id="titles-b" class="layer clip" data-start="9" data-duration="9" data-track-index="2">
+        <div class="top">
+          <span class="kicker" id="b-kicker">L'AMBIANCE</span>
+          <span class="big" id="b-big">Tout un stade</span>
+          <span class="bar" id="b-bar"></span>
+        </div>
+        <div class="bottom">
+          <span class="tag" id="b-tag">Pour <em>le SCO</em></span>
+          <span class="sub" id="b-sub">Fumigènes, drapeaux, 90 minutes de bruit</span>
+        </div>
+      </div>
+
+      <div id="titles-c" class="layer clip" data-start="18" data-duration="9" data-track-index="2">
+        <div class="top">
+          <span class="kicker" id="c-kicker">SUR LE TERRAIN</span>
+          <span class="big" id="c-big">Le match</span>
+          <span class="bar" id="c-bar"></span>
+        </div>
+        <div class="bottom">
+          <span class="tag" id="c-tag">Chaque <em>ballon</em> compte</span>
+        </div>
+      </div>
+
+      <div id="end" class="layer clip" data-start="27" data-duration="3" data-track-index="3">
+        <span class="brand" id="end-brand">Side Up</span>
+        <span class="brand" id="end-brand2"><em>Production</em></span>
+        <span class="handle" id="end-handle">@sideupcreator</span>
+      </div>
+    </div>
+    <script>
+      const tl = gsap.timeline({ paused: true });
+      const ease = "power4.out";
+
+      // Scene A
+      tl.fromTo("#a-kicker", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease }, 0.2);
+      tl.fromTo("#a-big1", { xPercent: -110, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.7, ease }, 0.35);
+      tl.fromTo("#a-big2", { xPercent: 110, opacity: 0 }, { xPercent: 0, opacity: 1, duration: 0.7, ease }, 0.55);
+      tl.fromTo("#a-bar", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.6, ease }, 0.9);
+      tl.to(["#a-kicker", "#a-big1", "#a-big2", "#a-bar"], { opacity: 0, y: -40, duration: 0.4, stagger: 0.05, ease: "power2.in" }, 8.3);
+
+      // Main video punch-in
+      tl.fromTo("#main", { scale: 1 }, { scale: 1.06, duration: 9, ease: "none" }, 0);
+      tl.fromTo("#main", { scale: 1.06 }, { scale: 1, duration: 0.5, ease, immediateRender: false }, 9);
+      tl.fromTo("#main", { scale: 1 }, { scale: 1.08, duration: 8.5, ease: "none", immediateRender: false }, 9.5);
+
+      // Scene B
+      tl.fromTo("#b-kicker", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease }, 9.2);
+      tl.fromTo("#b-big", { y: 80, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease }, 9.35);
+      tl.fromTo("#b-bar", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.6, ease }, 9.7);
+      tl.fromTo("#b-tag", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease }, 10.2);
+      tl.fromTo("#b-sub", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease }, 10.5);
+      tl.to(["#b-kicker", "#b-big", "#b-bar", "#b-tag", "#b-sub"], { opacity: 0, y: -40, duration: 0.4, stagger: 0.04, ease: "power2.in" }, 17.3);
+
+      // Scene C
+      tl.fromTo("#c-kicker", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease }, 18.2);
+      tl.fromTo("#c-big", { scale: 1.4, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease, transformOrigin: "left center" }, 18.35);
+      tl.fromTo("#c-bar", { scaleX: 0, transformOrigin: "left center" }, { scaleX: 1, duration: 0.6, ease }, 18.7);
+      tl.fromTo("#c-tag", { y: 60, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease }, 19.2);
+      tl.to(["#c-kicker", "#c-big", "#c-bar", "#c-tag"], { opacity: 0, y: -40, duration: 0.4, stagger: 0.04, ease: "power2.in" }, 26.3);
+
+      // End card
+      tl.fromTo(["#end-brand", "#end-brand2"], { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease }, 27.1);
+      tl.fromTo("#end-handle", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, ease }, 27.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

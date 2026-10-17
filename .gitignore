@@ -1,0 +1,4 @@
+# Monteur : les vidéos sources et les rendus restent sur Drive
+monteur/projets/*/assets/
+monteur/projets/*/out/
+node_modules/
