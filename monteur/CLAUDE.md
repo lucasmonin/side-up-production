@@ -22,3 +22,8 @@ Reels dynamique, 30 à 60 s, accent jaune `#f2c94c`, typo grasse en capitales, c
 
 ## Interdit sans l'accord de lucas
 Publier, programmer, envoyer un mail, supprimer un fichier Drive.
+
+## Pièges connus
+- Le CDN jsdelivr est bloqué dans les sessions cloud : charger GSAP depuis `lib/gsap.min.js` (copié depuis `npm pack gsap@3.14.2`).
+- Rognez les bandes noires avant le montage : `ffmpeg -vf cropdetect` puis `crop=...` vers `assets/main.mp4`.
+- Le connecteur HyperFrames refuse compose/render depuis Claude Code : utiliser la CLI `npx hyperframes`.
